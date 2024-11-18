@@ -1,4 +1,5 @@
 <template>
+  <router-view />
   <div id="app">
     <div class="chat-container">
       <h1 class="title">Real-Time Chat</h1>
