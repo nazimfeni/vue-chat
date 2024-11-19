@@ -21,14 +21,24 @@ export default {
     },
     methods: {
         async login() {
-            try {
-                await api.login({ email: this.email, password: this.password });
-                alert('Login successful');
-                this.$router.push('/dashboard');
-            } catch (error) {
-                alert('Invalid credentials');
-            }
-        },
+    try {
+        const response = await api.login({ email: this.email, password: this.password });
+
+        // Extract token and user data from the API response
+        const { token, user } = response.data;
+
+        // Save the token (e.g., in localStorage or Vuex store)
+        localStorage.setItem('authToken', token);
+
+        alert(`Welcome, ${user.name}! Login successful.`);
+
+        // Redirect to the dashboard
+        this.$router.push('/dashboard');
+    } catch (error) {
+        alert('Invalid credentials');
+        console.error('Login error:', error); // Debugging
+    }
+}
     },
 };
 </script>

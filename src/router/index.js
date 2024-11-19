@@ -11,7 +11,7 @@ const routes = [
         path: '/dashboard', 
         name: 'Dashboard', 
         component: Dashboard,
-        meta: { requiresAuth: true },
+         meta: { requiresAuth: true },
     },
 ];
 
@@ -20,13 +20,17 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach(async (to, from, next) => {
-    const isAuthenticated = await api.getUser().then(() => true).catch(() => false);
-
-    if (to.meta.requiresAuth && !isAuthenticated) {
-        next('/login');
+// Add navigation guard
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        const isAuthenticated = !!localStorage.getItem('authToken'); // Example check for token
+        if (!isAuthenticated) {
+            next('/login'); // Redirect to login if not authenticated
+        } else {
+            next(); // Proceed to the route
+        }
     } else {
-        next();
+        next(); // No auth required
     }
 });
 
