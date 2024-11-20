@@ -33,7 +33,9 @@ export default {
         alert(`Welcome, ${user.name}! Login successful.`);
 
         // Redirect to the dashboard
-        this.$router.push('/dashboard');
+        window.location.href = `/dashboard?name=${encodeURIComponent(user.name)}`;
+
+
     } catch (error) {
         alert('Invalid credentials');
         console.error('Login error:', error); // Debugging

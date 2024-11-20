@@ -3,6 +3,7 @@
     <div id="app">
       <div class="chat-container">
         <h1 class="title">Real-Time Chat</h1>
+        
         <div class="chat-box">
           <div v-for="msg in messages" :key="msg.id" class="message">
             <strong class="user">{{ msg.user }}</strong>: 
@@ -10,12 +11,13 @@
           </div>
         </div>
         <form @submit.prevent="sendMessage" class="chat-form">
-          <input 
+          <!-- <input 
             v-model="user" 
-            placeholder="Your Name" 
+            placeholder="Your Name"
             class="input user-input" 
+            readonly 
             required 
-          />
+          /> -->
           <input 
             v-model="message" 
             placeholder="Type a message" 
@@ -32,20 +34,33 @@
   import axios from 'axios';
   
   export default {
+    computed: {
+        userName() {
+            return this.$route.query.name || 'Guest';
+        }
+    },
     data() {
       return {
         messages: [],
+        
         user: '',
         message: ''
       };
     },
     mounted() {
+      this.user = this.userName;
       this.fetchMessages();
       this.$socket.on('receiveMessage', (msg) => {
         this.messages.push(msg);
       });
     },
     methods: {
+      
+
+
+
+
+
       fetchMessages() {
         axios.get('http://localhost:8000/api/messages').then((response) => {
           this.messages = response.data;
